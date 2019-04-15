@@ -7,24 +7,46 @@
 <script src="js/createjs_1.1_min.js"></script>
 <script src="js/zim_10.1.0.js"></script>
 
+
 <script>
 
-var frame = new Frame();
-frame.on("ready", function() {
+const color = light; // ZIM colors like green, blue, pink, faint, clear, etc.
+const outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
+
+const frame = new Frame({color, outerColor}); // es6 object property value match
+frame.on("ready", () => {
+    
     zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
 
-    var stage = frame.stage;
-    var stageW = frame.width;
-    var stageH = frame.height;
-    frame.color= light;
-    frame.outerColor=dark;
+    const stage = frame.stage;
+    let stageW = frame.width;
+    let stageH = frame.height;
 
+    const page1 = new Container(stageW, stageH);
+    const back1 = new Rectangle(stageW, stageH, blue).addTo(page1);
+    // page1.id = "page1";
+    const title1 = new Label("PAGE 1").addTo(page1).pos(30,30);
+    
+    const page2 = new Container(stageW, stageH);
+    const back2 = new Rectangle(stageW, stageH, pink).addTo(page2);
+    // page2.id = "page2";
+    const title2 = new Label("PAGE 2").addTo(page2).pos(30,30);
+    
+    const pages = new Pages([
+        {page:page1, swipe:[page2, page2]}, 
+        {page:page2, swipe:[page1, page1]}
+    ], "slide").addTo();
+    
+    
+    frame.on("resize", () => {
+        back1.scaleTo(stage, 100, 100, "both");
+        back2.scaleTo(stage, 100, 100, "both");
+        pages.resize();
+        stage.update();
+    });
 
-    new Circle(100, pink)
-        .center()
-        .drag();
-
-
+    
+    
     stage.update(); // this is needed to show any changes
 
 }); // end of ready
