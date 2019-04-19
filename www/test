@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Mobile Assignment | Alina Raza</title>
+
+<script src="js/createjs_1.1_min.js"></script>
+<script src="js/zim_10.1.0.js"></script>
+<script src="https://d309knd7es5f10.cloudfront.net/pizzazz_02.js"></script>
+
+
+<script>
+
+const color = light; // ZIM colors like green, blue, pink, faint, clear, etc.
+const outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
+const assets= ["cat.png", "back-buildings.png","far-buildings.png", "foreground.png"]
+const path = "assets/"
+const frame = new Frame({color, outerColor, assets, path}); // es6 object property value match
+frame.on("ready", () => {
+    
+    zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
+
+    const stage = frame.stage;
+    let stageW = frame.width;
+    let stageH = frame.height;
+
+    
+    //page 1
+    const page1 = new Container(stageW, stageH);
+    const back1 = new Rectangle(stageW, stageH, blue).addTo(page1);
+    // page1.id = "page1";
+    const title1 = new Label({text:"The Game", color:white}).addTo(page1).center().mov(0,-80)
+    //play button that takes user to game and begins the game
+    const playBtn = new Button({
+        label:"Play",
+        shadowColor:-1,
+        backgroundColor: pink,
+        rollBackgroundColor:red
+    }).addTo(page1).center()
+    playBtn.on("click", function() {
+            pages.go(page2, "right");
+            playGame();
+        })
+    // function makeSettings() {
+    var icon = pizzazz.makeIcon("settings", "white");
+    var settings = new Button({
+        width:70,
+        color:white,
+        backgroundColor:blue,
+        rollBackgroundColor:tin,
+        corner:10,
+        icon:icon,
+        shadowColor: -1
+    })
+        .center()
+        .pos(30,30,null,null,page1);    
+
+ 
+    //page 2
+        const page2 = new Container(stageW, stageH);
+        const back2 = new Rectangle(stageW, stageH, pink).addTo(page2);
+        // page2.id = "page2";
+        const title2 = new Label("PAGE 2").addTo(page2).pos(30,30);
+        // const circle = new Circle(100, blue)
+        //     .center()
+        //     .drag();
+    function playGame(){
+        const backBuildings = new Scroller(frame.asset("back-buildings.png").addTo().scaleTo({boundObj:stage, type:"both"}),.2);
+        const farBuildings = new Scroller(frame.asset("far-buildings.png").addTo().scaleTo({boundObj:stage, type:"both"}),.5);
+        const foreground = new Scroller(frame.asset("back-buildings.png").addTo().scaleTo({boundObj:stage, type:"both"}),.6);
+
+        const sprite = frame.asset("cat.png");
+        const cat = new Sprite({
+            image:sprite,
+            cols:3,
+            row:1
+        }) .centerReg()
+            .sca(2)
+            .addTo(stage)
+            .pos(null, 50, null, true)
+            // .run({loop:true});
+        const dynamo = new Dynamo({
+            sprite:cat,
+            speed:5,
+            reversible:false,
+            flip:true
+        });
+        const accelerator = new Accelerator(([backBuildings, farBuildings, foreground]));
+
+        const controller = new MotionController({
+            container:stage,
+            target:accelerator,
+            type:"mousedown",
+            speed:30,
+            damp:.2,
+            minPercentSpeed:-500,
+            maxPercentSpeed:300
+        });
+        
+    };
+
+        
+    const pages = new Pages([
+        {page:page1, swipe:[page2, page2]}, 
+        {page:page2, swipe:[page1, page1]}
+    ], "slide").addTo();
+
+    
+    frame.on("resize", () => {
+        back1.scaleTo(stage, 100, 100, "both");
+        back2.scaleTo(stage, 100, 100, "both");
+
+        pages.resize();
+        stage.update();
+
+        // circle.scaleTo(stage, 50, 50,"both") 
+        // .addTo(page2)
+        // .fit();
+    });
+
+    
+    
+    stage.update(); // this is needed to show any changes
+
+}); // end of ready
+
+</script>
+
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+
+</head>
+
+<body>
+<!-- canvas with id="myCanvas" is made by zim Frame -->
+</body>
+</html>

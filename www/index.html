@@ -2,18 +2,20 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>ZIM Frame - Fit Template</title>
+<title>Mobile Assignment | Alina Raza</title>
 
 <script src="js/createjs_1.1_min.js"></script>
 <script src="js/zim_10.1.0.js"></script>
+<script src="https://d309knd7es5f10.cloudfront.net/pizzazz_02.js"></script>
 
 
 <script>
 
 const color = light; // ZIM colors like green, blue, pink, faint, clear, etc.
 const outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
-
-const frame = new Frame({color, outerColor}); // es6 object property value match
+const assets= ["cat.png","cats.png","background.jpg","fish.png","dog.png","correct.png","wrong.png"]
+const path = "assets/"
+const frame = new Frame({color, outerColor, assets, path}); // es6 object property value match
 frame.on("ready", () => {
     
     zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
@@ -22,27 +24,166 @@ frame.on("ready", () => {
     let stageW = frame.width;
     let stageH = frame.height;
 
+    
+    //page 1
     const page1 = new Container(stageW, stageH);
     const back1 = new Rectangle(stageW, stageH, blue).addTo(page1);
     // page1.id = "page1";
-    const title1 = new Label("PAGE 1").addTo(page1).pos(30,30);
-    
-    const page2 = new Container(stageW, stageH);
-    const back2 = new Rectangle(stageW, stageH, pink).addTo(page2);
-    // page2.id = "page2";
-    const title2 = new Label("PAGE 2").addTo(page2).pos(30,30);
-    
+    const title1 = new Label({text:"game", color:white}).addTo(page1).center().mov(0,-80)
+    //play button that takes user to game and begins the game
+    const playBtn = new Button({
+        label:"Play",
+        shadowColor:-1,
+        backgroundColor: pink,
+        rollBackgroundColor:red
+    }).addTo(page1).center()
+    playBtn.on("click", function() {
+            pages.go(page3, "right");
+            playGame();
+         
+        })
+    // function makeSettings() {
+    var icon = pizzazz.makeIcon("settings", "white");
+    var settings = new Button({
+        width:70,
+        color:white,
+        backgroundColor:blue,
+        rollBackgroundColor:tin,
+        corner:10,
+        icon:icon,
+        shadowColor: -1
+    })
+        .center()
+        .pos(30,30,null,null,page1);    
+
+ 
+    //page 2
+
+        const page2 = new Container(stageW, stageH);
+        const back2 = new Rectangle(stageW, stageH, pink).addTo(page2);
+        const title2 = new Label("PAGE 2").addTo(page2).pos(30,30);
+        
+        const page3 = new Container(stageW, stageH);
+        const back3 = new Rectangle(stageW, stageH, "#3A3B39").addTo(page3);
+        const title3 = new Label("PAGE 3").addTo(page3).pos(30,30);
+        var icon = pizzazz.makeIcon("home", "white");
+        var home = new Button({
+            width:70,
+            color:white,
+            backgroundColor:clear,
+            rollBackgroundColor:tin,
+            corner:10,
+            icon:icon,
+            shadowColor: -1
+        })
+        .center()
+        .pos(30,30,null,null,page3);    
+
+        home.on("click", function() {
+            pages.go(page1, "left");
+        })
+    //page 3
+    const road = frame.asset("background.jpg")
+    var sprite = frame.asset("cats.png");
+    var cat;
+    function playGame(){
+        createDog();
+        // createFish();
+        Ticker.add(animate)
+
+        var sprite = frame.asset("cats.png");
+         cat = new Sprite({
+            image:sprite,
+            cols:3,
+            rows:1,
+        })  .centerReg()
+            .pos(null, 50, null, true)
+            .run({loop:true})
+        
+        // road.addTo(page3);
+        
+         var accelerator = [
+
+        //  new Scroller({backing:road, speed:2.5, gapFix:-5, horizontal:false}),
+         new Dynamo({
+            sprite:cat,
+            // speed:5,
+            reversible:false,
+         })
+        ];
+
+         cat.loc(page3.width / 2, page3.height - 20, page3);
+         var controller = new MotionController({
+            container:page3,
+            target:cat,
+            type:"keydown",
+            boundary:page3,
+            // speed:10,
+            // damp:.2,
+            // minPercentSpeed:-500,
+            // maxPercentSpeed:300
+        });
+  
+    };
+
+    var wrong;
+	var dogs = new Container();
+	page3.addChild(dogs);
+    function createDog(){
+        interval([200, 1200], function() {
+			var dog = frame.asset("dog.png").clone();
+			dog
+				.reg(dog.width/2, dog.height)
+				.loc(rand(dog.width, back3.width-dog.width), -10, dogs);
+
+			wrong = frame.asset("wrong.png").clone();
+			wrong.reg(wrong.width/2, wrong.height-10);
+			dog.wrong = wrong;
+        });
+    }
+
+    var speed = 10;
+    function animate() {
+        // cat.x = damp.convert(stage.mouseX-page3.x);
+
+        loop(dogs, function(dog) {
+			// 13. move the item
+			dog.y+=speed;
+			// hitTestCircle would be better test but could bog depending...
+			// if (robber.hitTestCircle(bomb)) {
+
+			// 14. check to see of the item is hitting the player
+			if (cat.hitTestBounds(dog)) {
+
+				// 15. if so then do whatever and remove the item from the container
+				// lose game or take away life or points, play sound, etc.
+				wrong(dog);
+			}
+
+			// 16. also check to see if item has fallen past the ground
+			if (dog.y >= page3.height+1) {
+				wrong(dog);
+			}
+		}, true)
+    }
     const pages = new Pages([
-        {page:page1, swipe:[page2, page2]}, 
-        {page:page2, swipe:[page1, page1]}
+        {page:page1, swipe:[null, page2]}, 
+        {page:page2, swipe:[page1, page3]},
+        {page:page3, swipe:[null, null]},
+
+
     ], "slide").addTo();
-    
+
     
     frame.on("resize", () => {
         back1.scaleTo(stage, 100, 100, "both");
         back2.scaleTo(stage, 100, 100, "both");
+        // road.scaleTo(stage, 100, 100, "both")
+        
+
         pages.resize();
         stage.update();
+
     });
 
     
