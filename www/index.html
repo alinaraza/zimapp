@@ -98,7 +98,7 @@ frame.on("ready", () => {
             rows:1,
         })  .centerReg()
             .pos(null, 50, null, true)
-            .run({loop:true})
+            .run({loop:true}).drag()
         
         // road.addTo(page3);
         
@@ -136,9 +136,9 @@ frame.on("ready", () => {
 				.reg(dog.width/2, dog.height)
 				.loc(rand(dog.width, back3.width-dog.width), -10, dogs);
 
-			wrong = frame.asset("wrong.png").clone();
-			wrong.reg(wrong.width/2, wrong.height-10);
-			dog.wrong = wrong;
+			// wrong = frame.asset("wrong.png").clone();
+			// wrong.reg(wrong.width/2, wrong.height-10);
+			// dog.wrong = wrong;
         });
     }
 
@@ -162,7 +162,7 @@ frame.on("ready", () => {
 
 			// 16. also check to see if item has fallen past the ground
 			if (dog.y >= page3.height+1) {
-				wrong(dog);
+				// wrong(dog);
 			}
 		}, true)
     }
