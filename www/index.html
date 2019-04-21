@@ -13,7 +13,7 @@
 
 const color = light; // ZIM colors like green, blue, pink, faint, clear, etc.
 const outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
-const assets= ["cat.png","dogs.png","background.jpg","fishes.png","dog.png","correct.png","wrong.png"]
+const assets= ["cat.png","dogs.png","background.jpg","fishes.png","correct.png","wrong.png","Clean_Break.mp3", "Operatic_3.mp3",{src:"https://fonts.googleapis.com/css?family=VT323"}]
 const path = "assets/"
 const frame = new Frame({color, outerColor, assets, path}); // es6 object property value match
 frame.on("ready", () => {
@@ -28,7 +28,7 @@ frame.on("ready", () => {
     //page 1 - the introduction page
     const page1 = new Container(stageW, stageH);
     const back1 = new Rectangle(stageW, stageH, "#0ECCE5").addTo(page1);
-    const title1 = new Label({text:"Max the cat", color:white}).addTo(page1).center().mov(0,-80)
+    const title1 = new Label({text:"Max The Cat", color:white, font:"VT323",size:60}).addTo(page1).center().mov(0,-80)
     //play button that takes user to game and begins the game
     const playBtn = new Button({
         label:"Play",
@@ -108,7 +108,8 @@ frame.on("ready", () => {
             // size: 70,
             backgroundColor: "#FFBF17",
             corner: 10,
-            padding: 10,
+            paddingVertical:12,
+            paddingHorizontal:30
         }).pos(150, 30, null, null, page3);
 
     const road = frame.asset("background.jpg")
@@ -119,7 +120,12 @@ frame.on("ready", () => {
 		.setMask(back3);
     var sprite = frame.asset("cat.png");
     var cat;
-    function playGame(){
+    
+    var music;
+    function playGame(){    
+        // var music=frame.asset("Operatic_3.mp3").play({loop:true}) ;
+        // var music=frame.asset("Clean_Break.mp3").play({loop:true}) ;
+
         Ticker.add(animate)
          cat = new Sprite({
             image:sprite,
@@ -166,6 +172,7 @@ frame.on("ready", () => {
                 dogSprite.reg(dogSprite.width/2, dogSprite.height)
                 .loc(rand(dogSprite.width, game.width-dogSprite.width), -10, page3)           
                 .clone()
+                .getBounds()
                 dogs.push(dogSprite);
             });
     }
@@ -215,13 +222,43 @@ frame.on("ready", () => {
 
         loop(dogs,function(dogSprite){
             dogSprite.y+=speed;
+
+            if (cat.hitTestBounds(dogSprite)){
+                zog("dog")
+                dogSprite.removeFrom()   
+                if (points > 0){ 
+                    points--;
+                    pointsLabel.text =  points;
+                    zog(points)
+                    stage.update(); 
+                    // restartGame();
+                }
+                 
+            }
         })
         loop(fishes,function(fishSprite){
-            fishSprite.y+=speed;
+            fishSprite.y+=speed;        
+            if (cat.hitTestBounds(fishSprite)){
+                zog("fish")
+                fishSprite.removeFrom() 
+                points++;
+                pointsLabel.text =  points;
+                zog(points)
+                stage.update();     
+            }
         })
-
     }
- 
+    // function restartGame(){
+    //     zog("restart");
+    //     timeout(1000, function(){
+    //         var gameLabel = new Label({text:"GAMEOVER"}).center().fit("smallest")
+    //             zog("gameover");
+    //     })
+
+    //     timeout(1000, function(){
+    //         zgo("index.html");
+    //     });
+    // }
 
     const pages = new Pages([
         {page:page1, swipe:[null, page2]}, 
