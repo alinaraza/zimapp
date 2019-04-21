@@ -134,3 +134,334 @@ frame.on("ready", () => {
 <!-- canvas with id="myCanvas" is made by zim Frame -->
 </body>
 </html>
+=============
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Mobile Assignment | Alina Raza</title>
+
+<script src="js/createjs_1.1_min.js"></script>
+<script src="js/zim_10.1.0.js"></script>
+<script src="https://d309knd7es5f10.cloudfront.net/pizzazz_02.js"></script>
+
+
+<script>
+
+const color = light; // ZIM colors like green, blue, pink, faint, clear, etc.
+const outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
+const assets= ["cat.png","cats.png","background.jpg","fish.png","dog.png","correct.png","wrong.png"]
+const path = "assets/"
+const frame = new Frame({color, outerColor, assets, path}); // es6 object property value match
+frame.on("ready", () => {
+    
+    zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
+
+    const stage = frame.stage;
+    let stageW = frame.width;
+    let stageH = frame.height;
+
+    
+    //page 1
+    const page1 = new Container(stageW, stageH);
+    const back1 = new Rectangle(stageW, stageH, "#0ECCE5").addTo(page1);
+    // page1.id = "page1";
+    const title1 = new Label({text:"Max the cat", color:white}).addTo(page1).center().mov(0,-80)
+    //play button that takes user to game and begins the game
+    const playBtn = new Button({
+        label:"Play",
+        shadowColor:-1,
+        backgroundColor: "white",
+        color: "#FFBF17",
+        rollBackgroundColor:"#FFBF17",
+        rollColor: "white"
+    }).addTo(page1).center()
+    playBtn.on("click", function() {
+            pages.go(page3, "right");
+            playGame();
+         
+        })
+    // function makeSettings() {
+    var icon = pizzazz.makeIcon("settings", "white");
+    var settings = new Button({
+        width:70,
+        color:white,
+        backgroundColor:blue,
+        rollBackgroundColor:tin,
+        corner:10,
+        icon:icon,
+        shadowColor: -1
+    })
+        .center()
+        .pos(30,30,null,null,page1);    
+
+ 
+    //page 2
+
+        const page2 = new Container(stageW, stageH);
+        const back2 = new Rectangle(stageW, stageH, pink).addTo(page2);
+        const title2 = new Label("PAGE 2").addTo(page2).pos(30,30);
+        
+        const page3 = new Container(stageW, stageH);
+        const back3 = new Rectangle(stageW, stageH, "#3A3B39").addTo(page3);
+        const title3 = new Label("Points").addTo(page3).pos(30,30);
+        var icon = pizzazz.makeIcon("home", "white");
+        var home = new Button({
+            width:70,
+            color:white,
+            backgroundColor:clear,
+            rollBackgroundColor:tin,
+            corner:10,
+            icon:icon,
+            shadowColor: -1
+        })
+        .center()
+        .pos(30,30,null,null,page3);    
+
+        home.on("click", function() {
+            pages.go(page1, "left");
+        })
+    //page 3
+    const road = frame.asset("background.jpg")
+    road.addTo(back3);
+
+    var game = new Container(back3.width, back3.height)
+		.loc(back3)
+		.setMask(back3);
+    // var sprite = frame.asset("cats.png");
+    const cat = frame.asset("cat.png").sca(3);
+    function playGame(){
+        Ticker.add(animate)
+       
+        cat.loc(page3.width / 2, page3.height - 20, page3);
+        cat.reg(cat.width/2, cat.height);
+        
+         var accelerator = [
+         new Scroller({backing:road, direction:-1, speed:2.5, gapFix:-5, horizontal:false}),
+         ];
+    
+
+    };
+
+
+    var speed = 10;
+    function animate() {
+        var damp = new Damp(null, .3);
+	        damp.immediate(cat.x);
+            cat.x = damp.convert(stage.mouseX-page3.x);
+    }
+
+    const pages = new Pages([
+        {page:page1, swipe:[null, page2]}, 
+        {page:page2, swipe:[page1, page3]},
+        {page:page3, swipe:[null, null]},
+
+
+    ], "slide").addTo();
+
+    
+    frame.on("resize", () => {
+        back1.scaleTo(stage, 100, 100, "both");
+        back2.scaleTo(stage, 100, 100, "both");
+        road.scaleTo(stage, 100, 100, "both")
+        
+
+        pages.resize();
+        stage.update();
+
+    });
+
+    
+    
+    stage.update(); // this is needed to show any changes
+
+}); // end of ready
+
+</script>
+
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+
+</head>
+
+<body>
+<!-- canvas with id="myCanvas" is made by zim Frame -->
+</body>
+</html>
+
+
+
+
+---
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Mobile Assignment | Alina Raza</title>
+
+<script src="js/createjs_1.1_min.js"></script>
+<script src="js/zim_10.1.0.js"></script>
+<script src="https://d309knd7es5f10.cloudfront.net/pizzazz_02.js"></script>
+
+
+<script>
+
+const color = light; // ZIM colors like green, blue, pink, faint, clear, etc.
+const outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
+const assets= ["cat.png","cats.png","background.jpg","fish.png","dog.png","correct.png","wrong.png"]
+const path = "assets/"
+const frame = new Frame({color, outerColor, assets, path}); // es6 object property value match
+frame.on("ready", () => {
+    
+    zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
+
+    const stage = frame.stage;
+    let stageW = frame.width;
+    let stageH = frame.height;
+
+    
+    //page 1
+    const page1 = new Container(stageW, stageH);
+    const back1 = new Rectangle(stageW, stageH, "#0ECCE5").addTo(page1);
+    // page1.id = "page1";
+    const title1 = new Label({text:"Max the cat", color:white}).addTo(page1).center().mov(0,-80)
+    //play button that takes user to game and begins the game
+    const playBtn = new Button({
+        label:"Play",
+        shadowColor:-1,
+        backgroundColor: "white",
+        color: "#FFBF17",
+        rollBackgroundColor:"#FFBF17",
+        rollColor: "white"
+    }).addTo(page1).center()
+    playBtn.on("click", function() {
+            pages.go(page3, "right");
+            playGame();
+         
+        })
+    // function makeSettings() {
+    var icon = pizzazz.makeIcon("settings", "white");
+    var settings = new Button({
+        width:70,
+        color:white,
+        backgroundColor:blue,
+        rollBackgroundColor:tin,
+        corner:10,
+        icon:icon,
+        shadowColor: -1
+    })
+        .center()
+        .pos(30,30,null,null,page1);    
+
+ 
+    //page 2
+
+        const page2 = new Container(stageW, stageH);
+        const back2 = new Rectangle(stageW, stageH, pink).addTo(page2);
+        const title2 = new Label("PAGE 2").addTo(page2).pos(30,30);
+        
+        const page3 = new Container(stageW, stageH);
+        const back3 = new Rectangle(stageW, stageH, "#3A3B39").addTo(page3);
+        const title3 = new Label("Points").addTo(page3).pos(30,30);
+        var icon = pizzazz.makeIcon("home", "white");
+        var home = new Button({
+            width:70,
+            color:white,
+            backgroundColor:clear,
+            rollBackgroundColor:tin,
+            corner:10,
+            icon:icon,
+            shadowColor: -1
+        })
+        .center()
+        .pos(30,30,null,null,page3);    
+
+        home.on("click", function() {
+            pages.go(page1, "left");
+        })
+    //page 3
+    const road = frame.asset("background.jpg")
+    road.addTo(back3);
+
+    var game = new Container(back3.width, back3.height)
+		.loc(back3)
+		.setMask(back3);
+    // var sprite = frame.asset("cats.png");
+    // const cat = frame.asset("cat.png").sca(3);
+    function playGame(){
+        Ticker.add(animate)
+        var sprite = frame.asset("cats.png");
+         cat = new Sprite({
+            image:sprite,
+            cols:3,
+            rows:1,
+        })  .centerReg()
+            .pos(null, 50, null, true)
+            .run({loop:true}).sca(3)
+
+        // road.addTo(page3);
+        
+         var accelerator = [
+        //  new Scroller({backing:road, speed:2.5, gapFix:-5, horizontal:false}),
+         new Dynamo({
+            sprite:cat,
+            // speed:5,
+            reversible:false,
+         })
+        ];
+        //  cat.loc(page3.width / 2, page3.height - 20, page3);
+       
+        cat.loc(page3.width / 2, page3.height - 20, page3);
+        cat.reg(cat.width/2, cat.height);
+        
+         var accelerator = [
+         new Scroller({backing:road, direction:-1, speed:2.5, gapFix:-5, horizontal:false}),
+         ];
+    
+
+    };
+
+
+    var speed = 10;
+    function animate() {
+        var damp = new Damp(null, .3);
+	        damp.immediate(cat.x);
+            cat.x = damp.convert(stage.mouseX-page3.x);
+    }
+
+    const pages = new Pages([
+        {page:page1, swipe:[null, page2]}, 
+        {page:page2, swipe:[page1, page3]},
+        {page:page3, swipe:[null, null]},
+
+
+    ], "slide").addTo();
+
+    
+    frame.on("resize", () => {
+        back1.scaleTo(stage, 100, 100, "both");
+        back2.scaleTo(stage, 100, 100, "both");
+        road.scaleTo(stage, 100, 100, "both")
+        
+
+        pages.resize();
+        stage.update();
+
+    });
+
+    
+    
+    stage.update(); // this is needed to show any changes
+
+}); // end of ready
+
+</script>
+
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+
+</head>
+
+<body>
+<!-- canvas with id="myCanvas" is made by zim Frame -->
+</body>
+</html>

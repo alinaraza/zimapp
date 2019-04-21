@@ -13,7 +13,7 @@
 
 const color = light; // ZIM colors like green, blue, pink, faint, clear, etc.
 const outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
-const assets= ["cat.png","cats.png","background.jpg","fish.png","dog.png","correct.png","wrong.png"]
+const assets= ["cat.png","dogs.png","background.jpg","fishes.png","dog.png","correct.png","wrong.png"]
 const path = "assets/"
 const frame = new Frame({color, outerColor, assets, path}); // es6 object property value match
 frame.on("ready", () => {
@@ -25,150 +25,207 @@ frame.on("ready", () => {
     let stageH = frame.height;
 
     
-    //page 1
+    //page 1 - the introduction page
     const page1 = new Container(stageW, stageH);
-    const back1 = new Rectangle(stageW, stageH, blue).addTo(page1);
-    // page1.id = "page1";
-    const title1 = new Label({text:"game", color:white}).addTo(page1).center().mov(0,-80)
+    const back1 = new Rectangle(stageW, stageH, "#0ECCE5").addTo(page1);
+    const title1 = new Label({text:"Max the cat", color:white}).addTo(page1).center().mov(0,-80)
     //play button that takes user to game and begins the game
     const playBtn = new Button({
         label:"Play",
         shadowColor:-1,
-        backgroundColor: pink,
-        rollBackgroundColor:red
+        backgroundColor: "white",
+        color: "#FFBF17",
+        rollBackgroundColor:"#FFBF17",
+        rollColor: "white"
     }).addTo(page1).center()
     playBtn.on("click", function() {
             pages.go(page3, "right");
             playGame();
          
         })
-    // function makeSettings() {
-    var icon = pizzazz.makeIcon("settings", "white");
-    var settings = new Button({
+    var infoicon=pizzazz.makeIcon("info", "white");
+    var info = new Button({
         width:70,
         color:white,
-        backgroundColor:blue,
-        rollBackgroundColor:tin,
+        backgroundColor:"#FFBF17",
         corner:10,
-        icon:icon,
+        icon:infoicon,
+        shadowColor: -1
+	})
+    .pos(30,30,null,null,page1);    
+    info.on("click",function(){
+        pages.go(page2,"right")
+    });
+ 
+    //page 2 - the information page
+    const page2 = new Container(stageW, stageH);
+    const back2 = new Rectangle(stageW, stageH, "#0ECCE5").addTo(page2);
+    var homeicon = pizzazz.makeIcon("home", "white");
+    var home1 = new Button({
+        width:70,
+        color:white,
+        backgroundColor:"#FFBF17",
+        corner:10,
+        icon:homeicon,
         shadowColor: -1
     })
         .center()
-        .pos(30,30,null,null,page1);    
+        .pos(30,30,null,null,page2);    
+        home1.on("click",function(){
+            pages.go(page1,"left")
+        });
+    var instructionLabel = new Label({
+        text: "Help Max get as many fishes \n as he can. Make sure you avoid \nthe dogs in your way.\n Swipe to move Max around.",
+        color: white,
+        size: 42,
+        lineHeight: 70,
+        align: "center"
+    }).center().addTo(page2);
 
- 
-    //page 2
 
-        const page2 = new Container(stageW, stageH);
-        const back2 = new Rectangle(stageW, stageH, pink).addTo(page2);
-        const title2 = new Label("PAGE 2").addTo(page2).pos(30,30);
-        
-        const page3 = new Container(stageW, stageH);
-        const back3 = new Rectangle(stageW, stageH, "#3A3B39").addTo(page3);
-        const title3 = new Label("PAGE 3").addTo(page3).pos(30,30);
-        var icon = pizzazz.makeIcon("home", "white");
-        var home = new Button({
-            width:70,
-            color:white,
-            backgroundColor:clear,
-            rollBackgroundColor:tin,
-            corner:10,
-            icon:icon,
-            shadowColor: -1
-        })
+    //page3 - the game
+    var pointsLabel;
+    var points = 0;
+    const page3 = new Container(stageW, stageH);
+    const back3 = new Rectangle(stageW, stageH, "#3A3B39").addTo(page3);
+    var homeicon2 = pizzazz.makeIcon("home", "white");
+    var home2 = new Button({
+        width:70,
+        color:white,
+        backgroundColor:"#FFBF17",
+        corner:10,
+        icon:homeicon2,
+        shadowColor: -1
+    })
         .center()
         .pos(30,30,null,null,page3);    
-
-        home.on("click", function() {
+        home2.on("click", function() {
             pages.go(page1, "left");
         })
-    //page 3
+        pointsLabel = new Label({
+            text: points,
+            color: white,
+            // size: 70,
+            backgroundColor: "#FFBF17",
+            corner: 10,
+            padding: 10,
+        }).pos(150, 30, null, null, page3);
+
     const road = frame.asset("background.jpg")
-    var sprite = frame.asset("cats.png");
+    road.addTo(back3);
+
+    var game = new Container(back3.width, back3.height)
+		.loc(back3)
+		.setMask(back3);
+    var sprite = frame.asset("cat.png");
     var cat;
     function playGame(){
-        createDog();
-        // createFish();
         Ticker.add(animate)
-
-        var sprite = frame.asset("cats.png");
          cat = new Sprite({
             image:sprite,
             cols:3,
             rows:1,
         })  .centerReg()
             .pos(null, 50, null, true)
-            .run({loop:true}).drag()
-        
-        // road.addTo(page3);
+            // .run({loop:true})
+            .sca(3)
         
          var accelerator = [
-
-        //  new Scroller({backing:road, speed:2.5, gapFix:-5, horizontal:false}),
+         new Scroller({backing:road, direction:-1, speed:2.5, gapFix:-5, horizontal:false}),
          new Dynamo({
             sprite:cat,
-            // speed:5,
+            speed:5,
             reversible:false,
          })
-        ];
-
-         cat.loc(page3.width / 2, page3.height - 20, page3);
-         var controller = new MotionController({
-            container:page3,
-            target:cat,
-            type:"mousemove",
-            boundary:page3,
-            // speed:10,
-            // damp:.2,
-            // minPercentSpeed:-500,
-            // maxPercentSpeed:300
-        });
-  
+        ];       
+        cat.loc(page3.width / 2, page3.height - 20, page3);
+        cat.reg(cat.width/2, cat.height);
+        
+        createDogs();
+        createFishes();
+        if (points === 10){
+            createBlocks()
+        }
     };
 
-    var wrong;
-	var dogs = new Container();
-	page3.addChild(dogs);
-    function createDog(){
-        interval([200, 1200], function() {
-			var dog = frame.asset("dog.png").clone();
-			dog
-				.reg(dog.width/2, dog.height)
-				.loc(rand(dog.width, back3.width-dog.width), -10, dogs);
 
-			// wrong = frame.asset("wrong.png").clone();
-			// wrong.reg(wrong.width/2, wrong.height-10);
-			// dog.wrong = wrong;
-        });
+    //creates dogs
+    var dogs= [];
+    var dogSprite;
+    function createDogs(){
+            interval(1200, function(){
+                dogSprite= frame.asset("dogs.png")
+                dogSprite = new Sprite({
+                    image:dogSprite,
+                    cols:3,
+                    rows:1,
+                })   
+                // .centerReg()
+                .run({loop:true})
+                .sca(3)   
+                dogSprite.reg(dogSprite.width/2, dogSprite.height)
+                .loc(rand(dogSprite.width, game.width-dogSprite.width), -10, page3)           
+                .clone()
+                dogs.push(dogSprite);
+            });
     }
 
-    var speed = 10;
+    //creates fishes
+    var fishes= [];
+    var fishSprite;
+    function createFishes(){
+            interval(2000, function(){
+                fishSprite= frame.asset("fishes.png")
+                fishSprite = new Sprite({
+                    image:fishSprite,
+                    cols:3,
+                    rows:1,
+                })   
+                // .centerReg()
+                .run({loop:true})
+                .sca(3)   
+                fishSprite.reg(fishSprite.width/2, fishSprite.height)
+                .loc(rand(fishSprite.width, game.width-fishSprite.width), -30, page3)           
+                .clone()
+                fishes.push(fishSprite);
+            });
+    }
+
+    var blocks= [];
+    var block;
+    function createBlocks(){
+            interval(4000, function(){
+                block= new Rectangle({
+                    width:100,
+                    height:200,
+                    color:"#0ECCE5"
+                })   
+                block.reg(block.width/2, block.height)
+                .loc(rand(block.width, game.width-block.width), -30, page3)           
+                .clone()
+                blocks.push(block);
+            });
+    
+    }
+	var speed = 10;
     function animate() {
-        // cat.x = damp.convert(stage.mouseX-page3.x);
+        var damp = new Damp(null, .3);
+	        damp.immediate(cat.x);
+            cat.x = damp.convert(stage.mouseX-page3.x);
 
-        loop(dogs, function(dog) {
-			// 13. move the item
-			dog.y+=speed;
-			// hitTestCircle would be better test but could bog depending...
-			// if (robber.hitTestCircle(bomb)) {
+        loop(dogs,function(dogSprite){
+            dogSprite.y+=speed;
+        })
+        loop(fishes,function(fishSprite){
+            fishSprite.y+=speed;
+        })
 
-			// 14. check to see of the item is hitting the player
-			if (cat.hitTestBounds(dog)) {
-
-				// 15. if so then do whatever and remove the item from the container
-				// lose game or take away life or points, play sound, etc.
-				wrong(dog);
-			}
-
-			// 16. also check to see if item has fallen past the ground
-			if (dog.y >= page3.height+1) {
-				// wrong(dog);
-			}
-		}, true)
     }
+ 
+
     const pages = new Pages([
         {page:page1, swipe:[null, page2]}, 
-        {page:page2, swipe:[page1, page3]},
+        {page:page2, swipe:[page1, null]},
         {page:page3, swipe:[null, null]},
 
 
@@ -178,8 +235,8 @@ frame.on("ready", () => {
     frame.on("resize", () => {
         back1.scaleTo(stage, 100, 100, "both");
         back2.scaleTo(stage, 100, 100, "both");
-        // road.scaleTo(stage, 100, 100, "both")
-        
+        road.scaleTo(stage, 100, 100, "both");
+        instructionLabel.scaleTo(stage, 80, 80, "smallest");
 
         pages.resize();
         stage.update();
