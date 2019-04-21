@@ -256,19 +256,17 @@ frame.on("ready", () => {
         timeout(1000, function(){
             const gameLabel = new Label({text:"GAMEOVER", color:white, font:"VT323",size:60}).addTo(page3).center().mov(0,-80);
             zog("gameover");
-            zgo("index.html")
-            // const gameoverBtn = new Button({
-            //     label:"Restart",
-            //     shadowColor:-1,
-            //     backgroundColor: "white",
-            //     color: "#FFBF17",
-            //     rollBackgroundColor:"#FFBF17",
-            //     rollColor: "white"
-            // }).addTo(page3).center()
-            // gameoverBtn.on("click", function() {
-                
-            //     playGame();     
-            // }) 
+            const gameoverBtn = new Button({
+                label:"Restart",
+                shadowColor:-1,
+                backgroundColor: "white",
+                color: "#FFBF17",
+                rollBackgroundColor:"#FFBF17",
+                rollColor: "white"
+            }).addTo(page3).center()
+            gameoverBtn.on("click", function() {
+                zgo("index.html")
+            }) 
         })
        
     }
