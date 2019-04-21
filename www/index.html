@@ -13,7 +13,7 @@
 
 const color = light; // ZIM colors like green, blue, pink, faint, clear, etc.
 const outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
-const assets= ["cat.png","dogs.png","background.jpg","fishes.png","correct.png","wrong.png","Clean_Break.mp3", "Operatic_3.mp3",{src:"https://fonts.googleapis.com/css?family=VT323"}]
+const assets= ["cat.png","dogs.png","background.jpg","fishes.png","correct.png","correct.wav","wrong.png","wrong.wav","Clean_Break.mp3", "Operatic_3.mp3",{src:"https://fonts.googleapis.com/css?family=VT323"}]
 const path = "assets/"
 const frame = new Frame({color, outerColor, assets, path}); // es6 object property value match
 frame.on("ready", () => {
@@ -123,8 +123,7 @@ frame.on("ready", () => {
     
     var music;
     function playGame(){    
-        // var music=frame.asset("Operatic_3.mp3").play({loop:true}) ;
-        // var music=frame.asset("Clean_Break.mp3").play({loop:true}) ;
+        var music=frame.asset("Clean_Break.mp3").play({loop:true}) ;
 
         Ticker.add(animate)
          cat = new Sprite({
@@ -225,13 +224,14 @@ frame.on("ready", () => {
 
             if (cat.hitTestBounds(dogSprite)){
                 zog("dog")
+                wrong();
                 dogSprite.removeFrom()   
                 if (points > 0){ 
                     points--;
                     pointsLabel.text =  points;
                     zog(points)
                     stage.update(); 
-                    // restartGame();
+                    restartGame();
                 }
                  
             }
@@ -239,33 +239,60 @@ frame.on("ready", () => {
         loop(fishes,function(fishSprite){
             fishSprite.y+=speed;        
             if (cat.hitTestBounds(fishSprite)){
-                zog("fish")
+                zog("fish");
+                correct();
                 fishSprite.removeFrom() 
                 points++;
                 pointsLabel.text =  points;
                 zog(points)
                 stage.update();     
             }
+ 
+
         })
     }
-    // function restartGame(){
-    //     zog("restart");
-    //     timeout(1000, function(){
-    //         var gameLabel = new Label({text:"GAMEOVER"}).center().fit("smallest")
-    //             zog("gameover");
-    //     })
+    function restartGame(){
+        zog("restart");
+        timeout(1000, function(){
+            const gameLabel = new Label({text:"GAMEOVER", color:white, font:"VT323",size:60}).addTo(page3).center().mov(0,-80);
+            zog("gameover");
+            zgo("index.html")
+            // const gameoverBtn = new Button({
+            //     label:"Restart",
+            //     shadowColor:-1,
+            //     backgroundColor: "white",
+            //     color: "#FFBF17",
+            //     rollBackgroundColor:"#FFBF17",
+            //     rollColor: "white"
+            // }).addTo(page3).center()
+            // gameoverBtn.on("click", function() {
+                
+            //     playGame();     
+            // }) 
+        })
+       
+    }
+    var wrongx;var correcto;
+    function wrong(){
+        var wrong= frame.asset("wrong.wav").play();
+         wrongx=frame.asset("wrong.png").addTo(page3);
+        
+        timeout(0300, function(){
+           wrongx.removeFrom();
+        });
+    }
 
-    //     timeout(1000, function(){
-    //         zgo("index.html");
-    //     });
-    // }
-
+    function correct(){
+        var correct= frame.asset("correct.wav").play();
+         correcto=frame.asset("correct.png").addTo(page3);
+        timeout(0300, function(){
+            correcto.removeFrom();
+        });
+    }
     const pages = new Pages([
         {page:page1, swipe:[null, page2]}, 
         {page:page2, swipe:[page1, null]},
         {page:page3, swipe:[null, null]},
-
-
     ], "slide").addTo();
 
     
