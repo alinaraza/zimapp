@@ -13,7 +13,7 @@
 
 const color = light; // ZIM colors like green, blue, pink, faint, clear, etc.
 const outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
-const assets= ["cat.png","dogs.png","background.jpg","fishes.png","correct.png","correct.wav","wrong.png","wrong.wav","Clean_Break.mp3", "Operatic_3.mp3",{src:"https://fonts.googleapis.com/css?family=VT323"}]
+const assets= ["cat.png","dogs.png","background.jpg","fishes.png","correct.wav","wrong.wav","Clean_Break.mp3",{src:"https://fonts.googleapis.com/css?family=VT323"}]
 const path = "assets/"
 const frame = new Frame({color, outerColor, assets, path}); // es6 object property value match
 frame.on("ready", () => {
@@ -105,7 +105,6 @@ frame.on("ready", () => {
         pointsLabel = new Label({
             text: points,
             color: white,
-            // size: 70,
             backgroundColor: "#FFBF17",
             corner: 10,
             paddingVertical:12,
@@ -120,10 +119,11 @@ frame.on("ready", () => {
 		.setMask(back3);
     var sprite = frame.asset("cat.png");
     var cat;
-    
     var music;
+
+    //function that begins the game with the music
     function playGame(){    
-        // var music=frame.asset("Clean_Break.mp3").play({loop:true,  volume:.3}) ;
+        var music=frame.asset("Clean_Break.mp3").play({loop:true,  volume:.3}) ;
 
         Ticker.add(gameSettings)
          cat = new Sprite({
@@ -148,7 +148,6 @@ frame.on("ready", () => {
         
         createDogs();
         createFishes();
-        // createBlocks()
         
     };
 
@@ -164,13 +163,11 @@ frame.on("ready", () => {
                     cols:3,
                     rows:1,
                 })   
-                // .centerReg()
                 .run({loop:true})
                 .sca(3)   
                 dogSprite.reg(dogSprite.width/2, dogSprite.height)
                 .loc(rand(dogSprite.width, game.width-dogSprite.width), -10, page3)           
                 .clone()
-                .getBounds()
                 dogs.push(dogSprite);
             });
     }
@@ -186,7 +183,6 @@ frame.on("ready", () => {
                     cols:3,
                     rows:1,
                 })   
-                // .centerReg()
                 .run({loop:true})
                 .sca(3)   
                 fishSprite.reg(fishSprite.width/2, fishSprite.height)
@@ -195,8 +191,8 @@ frame.on("ready", () => {
                 fishes.push(fishSprite);
             });
     }
-
-	var speed = 10;
+    var gameover = false;
+	const speed = 10;
     function gameSettings() {
         var damp = new Damp(null, .5 );
 	        damp.immediate(cat.x);
@@ -206,66 +202,65 @@ frame.on("ready", () => {
             dogSprite.y+=speed;
 
             if (cat.hitTestBounds(dogSprite)){
-                zog("dog")
-                wrong();
-                dogSprite.removeFrom()
-                    if (points>0){
-                        points--;
-                        pointsLabel.text =  points;
-                        zog(points)
-                        stage.update(); 
-                    }
+                //gameover = true;
+                if (gameover == false){
+                   restartGame();
+                }
+                gameover = true;
+
             }
         })
         loop(fishes,function(fishSprite){
             fishSprite.y+=speed;        
             if (cat.hitTestBounds(fishSprite)){
-                zog("fish");
-                correct();
+                // zog("fish");
                 fishSprite.removeFrom() 
-                points++;
-                pointsLabel.text =  points;
-                zog(points)
-                stage.update();     
+
+                if (gameover==false){
+                    correct();
+                    fishSprite.y=0;
+                    points++;
+                    pointsLabel.text =  points;
+                    // zog(points)
+                }
+                stage.update(); 
+
             }
         })
     }
 
     function restartGame(){
-        zog("restart");
-        timeout(1000, function(){
-            const gameLabel = new Label({text:"GAMEOVER", color:white, font:"VT323",size:60}).addTo(page3).center().mov(0,-80);
-            zog("gameover");
-            // const gameoverBtn = new Button({
-            //     label:"Restart",
-            //     shadowColor:-1,
-            //     backgroundColor: "white",
-            //     color: "#FFBF17",
-            //     rollBackgroundColor:"#FFBF17",
-            //     rollColor: "white"
-            // }).addTo(page3).center()
-            // gameoverBtn.on("click", function() {
+        // zog("restart");
+        wrong();
+        loop(dogs,function(dogSprite){
+                dogSprite.removeFrom();
+            })  
+            
+            const gameLabel = new Label({text:"GAMEOVER", color:white, font:"VT323",size:60}).addTo(page3).center().mov(0,-200);
+            var gameScore = new Label({text:"Your Score:"+ points, color:white, font:"VT323",size:60}).addTo(page3).center().mov(0,-80);
+            stage.update()
+            // zog("gameover");
+            const gameoverBtn = new Button({
+                label:"Restart",
+                shadowColor:-1,
+                backgroundColor: "white",
+                color: "#FFBF17",
+                rollBackgroundColor:"#FFBF17",
+                rollColor: "white"
+            }).addTo(page3).center()
+            gameoverBtn.on("click", function() {
                 zgo("index.html")
-            // }) 
-        })
+            }) 
+        // })
        
     }
-    var wrongx;var correcto;
     function wrong(){
         var wrong= frame.asset("wrong.wav").play();
-         wrongx=frame.asset("wrong.png").addTo(page3).center().mov(0,-60);
         
-        timeout(0300, function(){
-           wrongx.removeFrom();
-        });
     }
 
     function correct(){
         var correct= frame.asset("correct.wav").play();
-         correcto=frame.asset("correct.png").addTo(page3).center().mov(0,-60);
-        timeout(0300, function(){
-            correcto.removeFrom();
-        });
     }
     
     const pages = new Pages([
