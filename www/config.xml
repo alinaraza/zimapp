@@ -6,10 +6,10 @@
         id        = "com.phonegap.helloworld"
         version   = "1.0.0">
 
-    <name>Zim App</name>
+    <name>Max The Cat</name>
 
     <description>
-        Hello World sample application that responds to the deviceready event.
+        A game where you help Max get as many fishes as he can while avoiding the dogs in his way.
     </description>
 
     <author href="http://alinaraza.com" email="alinaraza.contact@gmail.com">
@@ -79,28 +79,52 @@
     <icon src="icon/android/icon-48-mdpi.png"   gap:platform="android"    gap:qualifier="mdpi" />
     <icon src="icon/android/icon-72-hdpi.png"   gap:platform="android"    gap:qualifier="hdpi" />
     <icon src="icon/android/icon-96-xhdpi.png"  gap:platform="android"    gap:qualifier="xhdpi" />
+
     <icon src="icon/blackberry/icon-80.png"     gap:platform="blackberry" />
     <icon src="icon/blackberry/icon-80.png"     gap:platform="blackberry" gap:state="hover"/>
-    <icon src="icon/ios/icon-57.png"            gap:platform="ios"        width="57" height="57" />
+    
+    <icon src="icon/ios/icon-60@3x.png"         gap:platform="ios"       width="180" height="180" />
+
+	<icon src="icon/ios/icon-60.png"            gap:platform="ios"        width="60" height="60" />
+	<icon src="icon/ios/icon-60@2x.png"         gap:platform="ios"        width="120" height="120" />
+
+	<icon src="icon/ios/icon-76.png"            gap:platform="ios"        width="76" height="76" />
+	<icon src="icon/ios/icon-76@2x.png"         gap:platform="ios"        width="152" height="152" />
+
+	<icon src="icon/ios/icon-small.png"         gap:platform="ios"        width="29" height="29" />
+	<icon src="icon/ios/icon-small@2x.png"      gap:platform="ios"        width="58" height="58" />
+
+	<icon src="icon/ios/icon-40.png"            gap:platform="ios"        width="40" height="40" />
+	<icon src="icon/ios/icon-40@2x.png"         gap:platform="ios"        width="80" height="80" />
+
+    <icon src="icon/ios/icon.png"               gap:platform="ios"        width="57" height="57" />
+    <icon src="icon/ios/icon@2x.png"            gap:platform="ios"        width="114" height="114" />
     <icon src="icon/ios/icon-72.png"            gap:platform="ios"        width="72" height="72" />
-    <icon src="icon/ios/icon-57-2x.png"         gap:platform="ios"        width="114" height="114" />
-    <icon src="icon/ios/icon-72-2x.png"         gap:platform="ios"        width="144" height="144" />
-    <icon src="icon/webos/icon-64.png"          gap:platform="webos" />
-    <icon src="icon/windows-phone/icon-48.png"  gap:platform="winphone" />
-    <icon src="icon/windows-phone/icon-173.png" gap:platform="winphone"   gap:role="background" />
+    <icon src="icon/ios/icon-small.png"         gap:platform="ios"        width="29" height="29" />
+    <icon src="icon/ios/icon-50.png"            gap:platform="ios"        width="50" height="50" />
+    <icon src="icon/ios/icon-50@2x.png"         gap:platform="ios"        width="100" height="100" />
+
+
+    <icon src="icon/winphone/icon.png"      gap:platform="winphone" />
+    <icon src="icon/winphone/tileicon.png"  gap:platform="winphone"  width="173" height="173" gap:role="background" />
 
     <!-- Define app splash screen for each platform. -->
-    <gap:splash src="splash/android/screen-ldpi-portrait.png"       gap:platform="android" gap:qualifier="port-ldpi" />
-    <gap:splash src="splash/android/screen-mdpi-portrait.png"       gap:platform="android" gap:qualifier="port-mdpi" />
-    <gap:splash src="splash/android/screen-hdpi-portrait.png"       gap:platform="android" gap:qualifier="port-hdpi" />
-    <gap:splash src="splash/android/screen-xhdpi-portrait.png"      gap:platform="android" gap:qualifier="port-xhdpi" />
-    <gap:splash src="splash/blackberry/screen-225.png"              gap:platform="blackberry" />
-    <gap:splash src="splash/ios/screen-iphone-portrait.png"         gap:platform="ios"     width="320" height="480" />
-    <gap:splash src="splash/ios/screen-iphone-portrait-2x.png"      gap:platform="ios"     width="640" height="960" />
-    <gap:splash src="splash/ios/screen-iphone-portrait-568h-2x.png" gap:platform="ios"     width="640" height="1136" />
-    <gap:splash src="splash/ios/screen-ipad-portrait.png"           gap:platform="ios"     width="768" height="1024" />
-    <gap:splash src="splash/ios/screen-ipad-landscape.png"          gap:platform="ios"     width="1024" height="768" />
-    <gap:splash src="splash/windows-phone/screen-portrait.jpg"      gap:platform="winphone" />
+    <gap:splash src="splash/portrait/android/portrait-ldpi.png"          gap:platform="android"  width="200" height="320"   gap:qualifier="port-ldpi" />
+    <gap:splash src="splash/portrait/android/portrait-mdpi.png"          gap:platform="android"  width="320" height="480"   gap:qualifier="port-mdpi" />
+    <gap:splash src="splash/portrait/android/portrait-hdpi.png"          gap:platform="android"  width="480" height="800"   gap:qualifier="port-hdpi" />
+    <gap:splash src="splash/portrait/android/portrait-xhdpi.png"         gap:platform="android"  width="720" height="1280"  gap:qualifier="port-xhdpi" />
+    <gap:splash src="splash/portrait/android/portrait-xxhdpi.png"        gap:platform="android"  width="960" height="1600"  gap:qualifier="port-xxhdpi" />
+    <gap:splash src="splash/portrait/android/portrait-xxxhdpi.png"       gap:platform="android"  width="1280" height="1920" gap:qualifier="port-xxxhdpi" />
+
+    <gap:splash src="splash/portrait/ios/Default.png"                    gap:platform="ios"     width="320" height="480" />
+    <gap:splash src="splash/portrait/ios/Default@2x.png"                 gap:platform="ios"     width="640" height="960" />
+    <gap:splash src="splash/portrait/ios/Default-568h@2x.png"            gap:platform="ios"     width="640" height="1136" />
+    <gap:splash src="splash/portrait/ios/Default-667h@2x.png"            gap:platform="ios"     width="750" height="1334" />
+    <gap:splash src="splash/portrait/ios/Default-Portrait-736h@3x.png"   gap:platform="ios"     width="1242" height="2208" />
+    <gap:splash src="splash/portrait/ios/Default-Portrait.png"           gap:platform="ios"     width="768" height="1024" />
+    <gap:splash src="splash/portrait/ios//Default-Portrait@2x.png"       gap:platform="ios"     width="1536" height="2048" />
+
+    <gap:splash src="splash/portrait/windphone/SplashScreenImage.jpg"    gap:platform="winphone"  width="480" height="800" />
 
     <gap:config-file platform="ios" parent="CFBundleShortVersionString">
     <string>100</string>
